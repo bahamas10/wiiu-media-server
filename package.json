@@ -1,0 +1,23 @@
+{
+  "name": "wiiu-media-server",
+  "version": "0.0.0",
+  "description": "An HTTP media server made specifically for the Wii U browser",
+  "author": "Dave Eddy <dave@daveeddy.com> (http://www.daveeddy.com)",
+  "main": "./bin/wiiu-media-server.js",
+  "preferGlobal": true,
+  "bin": {
+    "httpserver": "./bin/wiiu-media-server.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git://github.com/bahamas10/wiiu-media-server.git",
+  "license": "MIT",
+  "dependencies": {
+    "access-log": "~0.3.3",
+    "posix-getopt": "~1.0.0",
+    "latest": "~0.1.2",
+    "static-route": "~0.0.10",
+    "easyreq": "~0.0.5"
+  }
+}

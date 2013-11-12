@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+	<head>
+		<link href="/third-party/font-awesome.css" rel="stylesheet">
+		<title>Wii U Media Browser</title>
+		<style>
+			html, body, * {
+				padding: 0;
+				margin: 0;
+				border: none;
+				background-color: #222;
+				color: #eee;
+				font-family: monospace;
+				font-size: 13pt;
+			}
+			#media-browser {
+				position: relative;
+				list-style: none;
+			}
+			#media-browser li a {
+				display: block;
+				position: relative;
+				border: 2px solid gray;
+				border-radius: 5px;
+				margin: 10px;
+				padding: 10px;
+				text-decoration: none;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			#media-browser li a:before {
+				position: relative;
+				margin-right: 10px;
+			}
+			#media-browser li a:hover {
+				background-color: #555;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="media-browser"></ul>
+
+		<script src="/third-party/jquery-2.0.0.min.js"></script>
+		<script>
+			var $mediabrowser;
+
+			$(document).ready(function() {
+				$mediabrowser = $('#media-browser');
+				var dir = (window.location.hash || '').substr(1) || '/media';
+				loaddir(dir);
+			});
+
+			$(window).on('hashchange', function() {
+				var dir = (window.location.hash || '').substr(1);
+				loaddir(dir);
+			});
+
+			function loaddir(dir) {
+				$.getJSON(dir + '?json', function(data) {
+					window.location.hash = dir;
+					$mediabrowser.empty();
+					$.each(data, function(i, file) {
+						var $li = $('<li>');
+						var $a = $('<a>');
+						$a.addClass('fa');
+
+						var isdir = file.indexOf('/') > -1;
+						file = file.replace('/', '');
+
+						var href = dir + '/' + file;
+						if (file === '..') {
+							if (dir === '/media')
+								return;
+							href = dirname(dir);
+							$a.addClass('back-dir');
+						}
+
+						if (isdir) {
+							href = '#' + href;
+							$a.addClass('media-dir');
+							$a.addClass('fa-folder');
+						} else {
+							$a.addClass('fa-file');
+						}
+
+						$a.attr('href', href);
+						$a.text(file);
+
+						$li.append($a);
+						$mediabrowser.append($li);
+					});
+				});
+			}
+
+			function basename(path) {
+				return path.replace(/\\/g,'/').replace( /.*\//, '' );
+			}
+
+			function dirname(path) {
+				return path.replace(/\\/g,'/').replace(/\/[^\/]*$/, '');;
+			}
+
+		</script>
+	</body>
+</html>
